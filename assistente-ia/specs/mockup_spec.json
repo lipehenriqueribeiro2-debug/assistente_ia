@@ -1,0 +1,84 @@
+{
+  "system": {
+    "core_status": "idle",
+    "active_module": null,
+    "last_command": ""
+  },
+  "modules": {
+    "orquestracao": {
+      "id": "orchestrator_01",
+      "title": "Infra & Automação",
+      "theme_aura": "#a92727",
+      "logs_tecnicos": [
+        "> [10:37:22] INFO: Iniciando ambiente local Python.",
+        "> [10:37:24] ERROR: Crash no fluxo do Prefect detectado.",
+        "> [10:37:25] INFO: Reiniciando rotina de automação. Aguardando resposta..."
+      ]
+    },
+    "estudos": {
+      "id": "focus_01",
+      "title": "Sistemas de Potência",
+      "theme_aura": "#0066ff",
+      "tarefas_ativas": [
+        "Compilar introdução e equacionamento no Overleaf.",
+        "Revisar relatório técnico: Correção de Fator de Potência.",
+        "Ajustar parâmetros de sequência da linha de transmissão (frequência operacional: 50 Hz)."
+      ]
+    },
+    "rpg_builder": {
+      "id": "campaign_01",
+      "title": "World-building & Lore",
+      "theme_aura": "#b829ff",
+      "contexto_editorial": "Campanha ativa: explorando as docas de Saint's Bay e os subníveis de Skullport. Party atual: 8 jogadores.",
+      "logs_tecnicos": [
+        "> GET /npc/encounter?target=Marcelo",
+        "> STATUS: 200 OK - Gerando bloco de estatísticas do monstro.",
+        "> ATRIBUTOS: força: 16, agilidade: 14, constituição: 15. (Modificador calculado)."
+      ]
+    },
+    "spotify_sync": {
+      "id": "media_01",
+      "title": "Controle de Mídia",
+      "theme_aura": "#1db954",
+      "faixa_atual": {
+        "musica": "Bioluminescence",
+        "artista": "Synthwave Sessions",
+        "estado": "tocando",
+        "progresso": "02:14 / 04:30"
+      },
+      "logs_tecnicos": [
+        "> [10:41:00] AUDIO_API: Conexão WebSocket estabelecida.",
+        "> [10:41:02] SYNC: Capturando frequências graves para pulsar o AiCore."
+      ]
+    },
+    "google_workspace": {
+      "id": "gsuite_01",
+      "title": "Integração Google",
+      "theme_aura": "#25ced1",
+      "tarefas_ativas": [
+        "Revisar e-mails não lidos (Prioridade Alta).",
+        "Sincronizar calendário de aulas da UFBA."
+      ],
+      "logs_tecnicos": [
+        "> [10:45:12] GMAIL_API: 3 novas mensagens na caixa de entrada.",
+        "> [10:45:15] CALENDAR_API: Conflito detectado na agenda de amanhã."
+      ]
+    },
+    "financas": {
+      "id": "finance_01",
+      "title": "Gestão de Ativos",
+      "theme_aura": "#3ecf8e",
+      "status_conexoes": [
+        "Nubank: Sincronizado (Última att: há 2 min)",
+        "BTG Pactual: Sincronizado (Última att: há 5 min)",
+        "Banco Inter: Autenticação pendente",
+        "Itaú Uniclass: Sincronizado"
+      ],
+      "logs_tecnicos": [
+        "> [10:50:01] SCRAPER: Atualizando cotações do Tesouro Direto.",
+        "> [10:50:04] CALC: Consolidando variação patrimonial semanal.",
+        "> [10:50:05] SYSTEM: Relatório financeiro compilado com sucesso."
+      ]
+    }
+  }
+}

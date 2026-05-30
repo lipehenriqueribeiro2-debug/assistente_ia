@@ -1,0 +1,20 @@
+Desenvolva o frontend estrutural de uma aplicação desktop em Tauri com React/Next.js seguindo esta especificação premium:
+
+ASSETS:
+- Componente <AiCore /> (React Three Fiber) no centro absoluto da tela.
+
+STYLE TOKENS (CSS / Tailwind customizado):
+- Cores: Fundo absoluto (--canvas-night: #0b1120), Vidro escuro (--surface-night: rgba(30, 41, 59, 0.6) com blur), Linhas (--hairline: #3e3e4d). Cores de sotaque transicionais baseadas no módulo ativo geridas por estado global.
+- Tipo: --font-display (Inter, tracking negativo), --font-mono (IBM Plex Mono).
+- Espacial: Layout absoluto ou Grid com o <AiCore /> centralizado. Modais posicionados via sobreposição (Z-index elevado).
+
+FEATURES TO BUILD:
+- Barra de Comando Ominpresente: Invocável via teclado (ex: Cmd+K). Fica invisível quando não acionada.
+- Arquitetura Efêmera: Painéis de execução (modais) surgem de baixo para cima com atraso escalar (Staggered de 40ms) usando animação baseada em física de mola (Spring: Mass 1, Stiffness 120, Damping 14).
+- Interação Avançada: Magnetismo tátil em elementos clicáveis primários (botões puxam em direção ao cursor). Cursor customizado que rastreia a posição e atua como fonte de luz responsiva nos painéis de vidro (Cursor-Tracked Lighting).
+- Integração de Back-end: A interface deve se comunicar silenciosamente via comandos Tauri com os orquestradores locais em Python/SQL e os fluxos do Prefect, formatando os logs em tempo real estritamente em --font-mono dentro dos modais de vidro.
+
+TECH STACK:
+- Tauri (Rust) + React/Next.js.
+- Framer Motion ou GSAP para todas as transições baseadas em física e shared element routing.
+- React Three Fiber para o render 3D.

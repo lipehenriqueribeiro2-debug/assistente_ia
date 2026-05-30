@@ -1,0 +1,19 @@
+{
+  "tipo_transicao": "Dinâmica de Luz Responsiva e Interação de Material (Cursor-Tracked Lighting)",
+  "contexto_uso": "Cartões de interface (Glassmorphism, metálicos ou holográficos), renders de produtos 3D (WebGL/Three.js) incorporados à UI, banners hero.",
+  "gatilho": "Coordenadas 'clientX' e 'clientY' do mouse sobre a viewport, ou giroscópio ('deviceorientation') em dispositivos móveis.",
+  "comportamento_espacial": {
+    "origem": "Fonte de luz virtual posicionada no espaço Z acima da tela.",
+    "movimento": "A fonte de luz direcional ou point light mapeia a posição normalizada do cursor (-1 a 1 nos eixos X e Y), alterando o ângulo de incidência sobre os materiais da interface."
+  },
+  "easing_e_timing": {
+    "curva_estimada": "Lerp constante (fator de interpolação ~0.05 a 0.1) aplicado às coordenadas da luz.",
+    "duracao_estimada": "Tempo real (Real-time). O atraso introduzido pelo Lerp cria sensação de espaço tridimensional."
+  },
+  "efeitos_visuais": {
+    "specular_highlights": "Brilho intenso (flare) que percorre as bordas chanfradas (bevels) e contornos do objeto dinamicamente conforme o mouse varre a tela.",
+    "normal_mapping_reativo": "Texturas de superfície (como ruído fino, acabamento escovado ou padrão geométrico) reagem revelando micro-sombras e contrastes que dependem unicamente da posição da luz interativa.",
+    "chromatic_aberration_ambiente": "Em materiais de vidro refrativo, o ângulo do mouse afeta como o canal RGB se divide nas bordas do objeto, simulando espessura real do vidro mudando o ponto focal da luz."
+  },
+  "descricao_detalhada": "A interface deixa de ser pintada com iluminação 'baked' (estática) em ferramentas de design. O material dos elementos UI (como um card translúcido ou um logotipo metálico 3D) possui propriedades de reflexão reais. O cursor do usuário atua como uma lanterna. Ao deslizar pela tela, reflexos líquidos viajam pela superfície do elemento, sombras internas (inner shadow) mudam de direção e bordas brilham capturando especularidade, garantindo um nível ultra-premium de imersão e fisicalidade digital."
+}

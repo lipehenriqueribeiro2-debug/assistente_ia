@@ -1,0 +1,18 @@
+{
+  "tipo_transicao": "Transição de Elemento Compartilhado (View Transitions API / FLIP)",
+  "contexto_uso": "Navegação contínua entre estado de lista (grid de cards) e estado de detalhe (página de produto ou projeto interno).",
+  "gatilho": "Clique no item de lista (card/miniatura).",
+  "comportamento_espacial": {
+    "origem": "Bounding box (X, Y, Width, Height) da miniatura na página atual.",
+    "movimento": "Expansão e reposicionamento contínuo em 60fps do estado original (miniatura) para o estado de destino (ex: imagem hero fullscreen)."
+  },
+  "easing_e_timing": {
+    "curva_estimada": "Cubic-bezier(0.85, 0, 0.15, 1) - Movimento expressivo, rápido no centro e altamente amortecido nas extremidades.",
+    "duracao_estimada": "600ms a 800ms."
+  },
+  "efeitos_visuais": {
+    "morphing_geometrico": "Transição simultânea do raio da borda ('border-radius' de 16px para 0px) e proporção de tela (Aspect Ratio) durante o voo.",
+    "crossfade_periferico": "Elementos não compartilhados da página origem esmaecem (fade-out) enquanto a página destino esmaece (fade-in) independentemente, usando a imagem em trânsito como âncora visual."
+  },
+  "descricao_detalhada": "O elemento âncora não sofre desmonte no DOM; visualmente, é tratado como um objeto único que cruza as rotas do site. Garante ao cérebro do usuário um mapa mental perfeito de onde o conteúdo veio e para onde foi, eliminando a desorientação cognitiva das transições de página tradicionais."
+}

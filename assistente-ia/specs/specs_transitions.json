@@ -1,0 +1,118 @@
+{
+  "transitions_specs": [
+    {
+      "tipo_transicao": "Clip-Path Circular Expansivo",
+      "contexto_uso": "Navegação entre páginas ou projetos principais.",
+      "gatilho": "Clique do usuário (on-click).",
+      "comportamento_espacial": {
+        "origem": "Ponto de clique do cursor (Mouse Event X/Y) ou centro geométrico de um elemento de gatilho.",
+        "movimento": "Expansão radial (scale) de 0% a 150% da viewport, garantindo cobertura total das extremidades da tela."
+      },
+      "easing_e_timing": {
+        "curva_estimada": "Cubic-bezier(0.7, 0, 0.3, 1) - Aceleração rápida no início (Ease-In) e desaceleração suave no final (Ease-Out).",
+        "duracao_estimada": "800ms a 1200ms."
+      },
+      "efeitos_visuais": {
+        "mascaramento": "Uso de 'clip-path: circle()' via CSS ou WebGL mask.",
+        "cores": "Substituição drástica da cor de fundo (background-color) atrelada à nova camada revelada.",
+        "elementos_internos": "Textos e imagens da nova página entram com um atraso (delay/stagger), utilizando opacidade de 0 a 1 e 'transform: translateY(20px)' a 0."
+      },
+      "descricao_detalhada": "Uma nova camada de visualização é gerada invisivelmente sobre a atual. Ao clicar, uma máscara circular se abre a partir do ponto de interação, revelando a nova cor de fundo. Assim que o círculo atinge cerca de 60% da tela, os elementos de tipografia e mídia da nova página começam a surgir sequencialmente (staggered fade-up), criando uma sensação de profundidade e revelação fluida."
+    },
+    {
+      "tipo_transicao": "Morphing de Layout Tipográfico (Técnica FLIP)",
+      "contexto_uso": "Mudança de abas ou categorias de conteúdo (ex: 'About' para 'Works').",
+      "gatilho": "Clique do usuário em links de navegação.",
+      "comportamento_espacial": {
+        "origem": "Posição atual do elemento no DOM.",
+        "movimento": "Interpolação direta das coordenadas X e Y (BoundingClientRect) da posição original para a nova posição no layout de destino."
+      },
+      "easing_e_timing": {
+        "curva_estimada": "Cubic-bezier(0.25, 1, 0.5, 1) - Curva de desaceleração predominante, sensação de 'assentamento' rápido (Snappy Ease-Out).",
+        "duracao_estimada": "600ms a 900ms."
+      },
+      "efeitos_visuais": {
+        "tipografia": "A formatação do texto (font-size, font-weight) pode interpolar simultaneamente com a posição.",
+        "midia": "Imagens antigas desaparecem instantaneamente ou com fade rápido; novas imagens entram deslizando de baixo para cima ('translateY(50px) para 0') acompanhadas de um 'scale' sutil (de 0.95 para 1).",
+        "mascaramento": "Imagens frequentemente entram mascaradas por um contêiner com 'overflow: hidden'."
+      },
+      "descricao_detalhada": "Os elementos de texto não desaparecem; eles se desprendem de seu fluxo atual e viajam fisicamente pela tela até sua nova posição na arquitetura da informação da página seguinte. Essa transição utiliza o princípio First-Last-Invert-Play (FLIP) para garantir 60fps. Elementos secundários que não existem na nova página desaparecem, enquanto novos elementos visuais (como galerias de imagens) entram em cascata logo após os textos se assentarem."
+    },
+    {
+      "tipo_transicao": "Wipe Linear Direcional de Textura",
+      "contexto_uso": "Alteração de estado de um produto (ex: troca de cor ou material) no mesmo modelo espacial.",
+      "gatilho": "Seleção de swatch/cor (on-click ou on-hover).",
+      "comportamento_espacial": {
+        "origem": "Borda lateral (esquerda ou direita) da bounding box do produto.",
+        "movimento": "Deslocamento linear no eixo X (da esquerda para a direita ou vice-versa) cruzando 100% da largura do elemento."
+      },
+      "easing_e_timing": {
+        "curva_estimada": "Cubic-bezier(0.4, 0, 0.2, 1) - Movimento constante com leve suavização nas pontas (Standard/Ease-in-out).",
+        "duracao_estimada": "400ms a 600ms."
+      },
+      "efeitos_visuais": {
+        "mascaramento": "Uso de 'clip-path: inset()' ou máscara de sobreposição de imagem.",
+        "sobreposicao": "O modelo 3D/imagem permanece perfeitamente estático. Apenas a camada de textura/render superior é revelada.",
+        "indicador_ui": "O botão ou rótulo acionado acompanha sutilmente o movimento com uma mudança de estado (ex: preenchimento de cor)."
+      },
+      "descricao_detalhada": "Ao selecionar uma nova especificação, a nova imagem correspondente é pré-carregada por baixo ou por cima da atual. Uma máscara retangular desliza horizontalmente, 'varrendo' a textura anterior e revelando o novo acabamento. O limite do corte é rígido (hard edge), sem desfoque, enfatizando a precisão técnica da mudança de material sem mover a silhueta do produto."
+    },
+    {
+      "tipo_transicao": "Cortina Deslizante com Máscara de Eixo Duplo",
+      "contexto_uso": "Abertura de menu fullscreen ou carregamento de página (Pre-loader to Home).",
+      "gatilho": "Clique no botão de menu ou evento de 'window.onload'.",
+      "comportamento_espacial": {
+        "origem": "Extremidades da tela (Top/Bottom ou Left/Right).",
+        "movimento": "Painéis de cor sólida deslizam para cobrir a tela (Translate 100% para 0) e, em seguida, se retraem ou se separam pelo meio."
+      },
+      "easing_e_timing": {
+        "curva_estimada": "Cubic-bezier(0.85, 0, 0.15, 1) - Alta aceleração e alta desaceleração, criando um movimento dramático e teatral.",
+        "duracao_estimada": "1000ms a 1500ms (fase completa)."
+      },
+      "efeitos_visuais": {
+        "paralaxe_interna": "Enquanto os painéis de fundo se movem, o conteúdo dentro deles pode ter um fator de escala inverso ou deslocamento oposto para criar profundidade geométrica.",
+        "tipografia_hero": "Textos de grande porte entram utilizando máscaras de linha (Line masking/Overflow hidden), onde as palavras sobem ('translateY(100%) para 0') letra por letra ou linha por linha.",
+        "linhas_guia": "Bordas finas (1px) animam suas larguras/alturas (scaleX/Y) de 0 a 1 para construir a estrutura de grade do layout simultaneamente à transição principal."
+      },
+      "descricao_detalhada": "Transição de alto peso visual. O estado atual é encoberto por blocos de cor (cortinas). Em seguida, essas cortinas se dividem (ex: do centro para as bordas esquerda/direita), atuando como máscaras. O conteúdo da nova página (tipografia monumental, vídeos de fundo) é revelado crescendo de dentro dessa divisão, sincronizado com o surgimento de linhas de grade estruturais na interface."
+    },
+    {
+      "tipo_transicao": "Elevação Modular em Cascata (Staggered Columns)",
+      "contexto_uso": "Apresentação de rankings, dados em destaque ou modais complexos.",
+      "gatilho": "Scroll para a seção ou término de carregamento (on-view).",
+      "comportamento_espacial": {
+        "origem": "Base da tela (Bottom).",
+        "movimento": "Múltiplos blocos retangulares de cores distintas são dimensionados ('scaleY') de 0 para alturas variáveis, ou transladados ('translateY') simultaneamente."
+      },
+      "easing_e_timing": {
+        "curva_estimada": "Cubic-bezier(0.175, 0.885, 0.32, 1.275) - Efeito Back/Overshoot suave (Bouncy effect), onde o elemento passa um pouco da altura final e retorna.",
+        "duracao_estimada": "700ms por coluna, com intervalo (stagger) de 100ms a 150ms entre elas."
+      },
+      "efeitos_visuais": {
+        "composicao": "Os blocos se organizam em um layout de pódio ou grade estruturada (CSS Grid).",
+        "sobreposicao_modal": "Após a fundação dos blocos coloridos, uma nova camada modal (vidro fosco ou cor sólida) pode deslizar de baixo para cima ('translateY(100%) para 0') sobrepondo a estrutura.",
+        "z-index": "Gerenciamento estrito de profundidade de camadas para permitir que elementos flutuem sobre os blocos (ex: posters de filmes com leve paralaxe)."
+      },
+      "descricao_detalhada": "Animação de construção arquitetônica. A página não apenas 'aparece', ela é montada. Colunas maciças de cor brotam da base da tela em sequência (staggered). Uma vez estabelecida a base de cor, os elementos de conteúdo (capas, textos) aparecem em fade sobre essas áreas. Modais secundários seguem a mesma lógica vertical, subindo como painéis físicos para encobrir a visão anterior."
+    },
+    {
+      "tipo_transicao": "Transição de Estado Mascarada por Forma Geométrica (Shape Window)",
+      "contexto_uso": "Carrosséis de imagens ou mudança de slides de destaque.",
+      "gatilho": "Navegação por setas (Next/Prev).",
+      "comportamento_espacial": {
+        "origem": "Centro de uma forma geométrica específica (ex: um círculo, um olho abstrato, um arco).",
+        "movimento": "O conteúdo de fundo muda quase instantaneamente, enquanto as formas internas na 'janela' rotacionam ('rotate'), mudam de escala ou são reordenadas no eixo Z."
+      },
+      "easing_e_timing": {
+        "curva_estimada": "Cubic-bezier(0.6, -0.28, 0.735, 0.045) para a saída rápida e Cubic-bezier(0.175, 0.885, 0.32, 1.275) para a entrada.",
+        "duracao_estimada": "500ms."
+      },
+      "efeitos_visuais": {
+        "mascaramento_estatico": "Uma forma SVG ou CSS (ex: formato de olho) funciona como um limite inalterável ('overflow: hidden').",
+        "animacao_conteudo_interno": "Apenas as geometrias vetoriais ou imagens dentro desta forma se movem durante a transição.",
+        "quebra_de_expectativa": "O fundo da página externa à forma geométrica muda de cor bruscamente (hard cut) no exato meio do tempo da transição interna."
+      },
+      "descricao_detalhada": "Em vez de mover a tela inteira, uma forma geométrica central atua como uma 'lente' ou 'janela'. Quando o usuário avança no carrossel, a cor de fundo do site muda abruptamente (ex: do bege para o preto escuro), enquanto a composição gráfica dentro da forma geométrica se reorganiza animadamente (giros, deslizamentos) para representar o novo estado. Cria um alto contraste de ritmo entre a mudança instantânea do exterior e a fluidez do interior."
+    }
+  ]
+}

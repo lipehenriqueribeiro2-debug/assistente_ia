@@ -1,0 +1,18 @@
+{
+  "tipo_transicao": "Interpolação Atrelada ao Scroll (Scroll-Linked Scrubbing)",
+  "contexto_uso": "Experiências narrativas (Scrollytelling), landing pages de produtos de alta tecnologia, revelação progressiva de interface.",
+  "gatilho": "Posição do scroll (scrollTop) em relação a um elemento de gatilho (Intersection Observer).",
+  "comportamento_espacial": {
+    "origem": "Estado inicial definido quando o elemento toca a base da viewport (0%).",
+    "movimento": "O avanço da animação no eixo de tempo (Timeline) é ditado pixel por pixel pelo avanço do scroll até o elemento sair pelo topo (100%)."
+  },
+  "easing_e_timing": {
+    "curva_estimada": "Linear (a interpolação ocorre no controle do input).",
+    "suavizacao_global": "Scroll suave nativo interceptado (Smooth Scroll via Lerp ~0.08) para garantir que a linha do tempo não pule quadros."
+  },
+  "efeitos_visuais": {
+    "desfoque_dinamico": "Valor de 'backdrop-filter: blur()' altera progressivamente de 0px a 20px conforme a camada se sobrepõe a outra.",
+    "tipografia_mask": "Textos extensos são revelados preenchendo sua cor (ou saindo de uma máscara) linha por linha à medida que o scroll avança."
+  },
+  "descricao_detalhada": "A barra de rolagem atua como o cabeçote de reprodução de um vídeo. Se o usuário para de rolar, a animação pausa instantaneamente (com uma leve inércia residual para manter a suavidade). Ideal para desmontar objetos 3D ou explodir vistas de produtos para mostrar componentes internos conforme o usuário avança na página."
+}

@@ -1,0 +1,18 @@
+{
+  "tipo_transicao": "Magnetismo Tátil (Magnetic Hover & UI Pulling)",
+  "contexto_uso": "Botões primários (CTAs), ícones flutuantes, links isolados na grade principal.",
+  "gatilho": "Movimento do cursor ('mousemove') entrando na área de influência (Hitbox expandida invisível do elemento).",
+  "comportamento_espacial": {
+    "origem": "Centro geométrico original do botão.",
+    "movimento": "O botão sofre deslocamento nos eixos X e Y puxando em direção às coordenadas do cursor, mas restrito a um raio máximo (ex: 20px do centro original)."
+  },
+  "easing_e_timing": {
+    "entrada_e_rastreamento": "Lerp rápido (0.2) para seguir o mouse com leve arrasto (lag), transmitindo 'peso'.",
+    "saida_release": "Spring de alta tensão (Stiffness: 400, Damping: 25) gerando um efeito de 'estilingue' de volta à origem quando o cursor sai da Hitbox."
+  },
+  "efeitos_visuais": {
+    "cursor_customizado": "O cursor primário do site (frequentemente um ponto circular) adere (snaps) perfeitamente ao centro do botão, ou adota a forma geométrica do botão com 'mix-blend-mode: difference'.",
+    "paralaxe_interna": "O texto dentro do botão se move na mesma direção do botão magnético, mas com um multiplicador de movimento menor, criando profundidade 3D."
+  },
+  "descricao_detalhada": "O botão adquire massa e tensão. Quando o mouse se aproxima, uma força invisível captura o cursor e puxa o botão junto. O usuário sente uma aderência física virtual. Ao arrastar o mouse para fora com força, o elo se quebra e o botão ricocheteia violentamente (mas controlado) de volta à sua grade original."
+}

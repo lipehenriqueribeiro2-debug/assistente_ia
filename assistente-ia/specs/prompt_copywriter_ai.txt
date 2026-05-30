@@ -1,0 +1,19 @@
+Você é um redator sênior de marca e interface. Escreva a microcópia para um sistema operacional modular (Aura OS) com este briefing:
+
+BRIEF:
+- Sentimento: Um núcleo pulsante e responsivo, como um coração orbital multifacetado.
+- Público: O construtor meticuloso que arquiteta múltiplos agentes do zero.
+- Anti-público: O usuário casual de emojis ou quem teme o terminal.
+- Objeto hero: O núcleo 3D (esfera hexagonal contida em casca vazada).
+- Trabalho: Orquestrar.
+- Memória de três segundos: Uma inteligência esférica isolada e silenciosa no vazio, desejando ser comandada.
+
+TOM: Combine com o sentimento. O usuário não deve ler um manual — ele deve sentir que está operando um terminal de comando cirúrgico. Frases curtas, imperativas, sem preenchimento. Palavras proibidas: moderno, limpo, minimalista, premium, profissional, dinâmico, produtivo.
+
+OUTPUT:
+1. Placeholder para a barra de comando vazia (máx 4 palavras).
+2. Títulos curtos para os modais efêmeros de: Estudos, Finanças, Infraestrutura e Spotify.
+3. Microcópia para estado de execução de agentes ("Executando", "Aguardando", "Falha").
+4. Mensagem de log inicial de inicialização do núcleo (uma frase).
+
+Retorne como JSON.

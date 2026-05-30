@@ -1,0 +1,170 @@
+{
+  "analise_motion_graphics": {
+    "categorias_visuais": [
+      {
+        "estilo": "Ilustração 2D / Flat Design Orgânico",
+        "descricao_geral": "Animação vetorial focada em formas abstratas fluidas, utilizando forte contraste de cores e texturas estilizadas para criar profundidade sem recorrer a 3D real.",
+        "comportamentos_animacao": [
+          {
+            "tecnica": "Liquid Motion e Morphing",
+            "detalhes": "Transições contínuas e sem cortes onde as formas se expandem e se retraem de maneira orgânica, simulando a física de líquidos espessos."
+          },
+          {
+            "tecnica": "Expansão Concêntrica",
+            "detalhes": "Elementos escalonam a partir de um ponto central (anchor point no centro) com curvas de interpolação (easing) suaves, criando uma sensação de pulsação."
+          }
+        ],
+        "efeitos_visuais_e_renderizacao": [
+          {
+            "efeito": "Texturização Procedural (Noise/Stipple)",
+            "detalhes": "Aplicação de ruído estático ou pontilhismo nas bordas das sombras e luzes, conferindo um aspecto tátil de ilustração impressa ou risografia."
+          },
+          {
+            "efeito": "Gradientes de Cores Sólidas",
+            "detalhes": "Uso de paletas análogas e complementares com transições de gradiente curtas para definir volume de forma minimalista."
+          }
+        ]
+      },
+      {
+        "estilo": "Interface HUD / Sci-Fi Interativo",
+        "descricao_geral": "Elementos de interface de usuário (UI) futuristas, caracterizados por linhas finas, formas geométricas precisas e elementos flutuantes.",
+        "comportamentos_animacao": [
+          {
+            "tecnica": "Rotação Orbital Contínua",
+            "detalhes": "Anéis e esferas giram em diferentes eixos (X, Y, Z) com velocidades independentes e constantes (linear keyframes), simulando um giroscópio."
+          },
+          {
+            "tecnica": "Distorção Ondulatória (Wave Warp)",
+            "detalhes": "As bordas externas sofrem oscilações em loop, movendo-se como frequências sonoras ou campos magnéticos instáveis."
+          }
+        ],
+        "efeitos_visuais_e_renderizacao": [
+          {
+            "efeito": "Glow e Blending Additive",
+            "detalhes": "Uso de modos de mesclagem como 'Add' ou 'Screen' combinados com brilho difuso para simular emissão de luz intensa (neon)."
+          },
+          {
+            "efeito": "Micro-partículas",
+            "detalhes": "Sistema de partículas empoeiradas com baixa opacidade e movimento caótico (turbulência) no plano de fundo."
+          }
+        ]
+      },
+      {
+        "estilo": "3D Abstrato e Tipografia Cinética Refractiva",
+        "descricao_geral": "Composição que mistura elementos tipográficos bidimensionais interagindo com objetos tridimensionais translúcidos, criando ilusões de ótica complexas.",
+        "comportamentos_animacao": [
+          {
+            "tecnica": "Distorção Cinética",
+            "detalhes": "O texto em movimento no fundo é deformado em tempo real ao passar por trás da malha 3D central, agindo como uma lente óptica."
+          },
+          {
+            "tecnica": "Levitação e Rotação Suave",
+            "detalhes": "O objeto principal flutua utilizando expressões de seno/cosseno no eixo Y, combinado com uma rotação lenta e inercial."
+          }
+        ],
+        "efeitos_visuais_e_renderizacao": [
+          {
+            "efeito": "Glassmorphism Avançado",
+            "detalhes": "Material configurado com alto Índice de Refração (IOR), gerando distorções precisas do ambiente (background) de acordo com a espessura da malha."
+          },
+          {
+            "efeito": "Dispersão Cromática (Chromatic Aberration)",
+            "detalhes": "Separação dos canais RGB nas bordas do objeto de vidro, simulando imperfeições de lentes reais."
+          }
+        ]
+      },
+      {
+        "estilo": "Malha Holográfica e Feixes de Luz",
+        "descricao_geral": "Estética cibernética baseada em conexões de pontos e linhas, representando redes, processamento de dados ou energia pura.",
+        "comportamentos_animacao": [
+          {
+            "tecnica": "Dinâmica Plexus",
+            "detalhes": "Vértices de um objeto 3D conectados por linhas que se formam e se rompem dinamicamente com base na proximidade espacial entre eles."
+          },
+          {
+            "tecnica": "Pulsação de Núcleo",
+            "detalhes": "Variação de escala e opacidade no centro da forma, sincronizada com o movimento da malha externa para sugerir um gerador de energia."
+          }
+        ],
+        "efeitos_visuais_e_renderizacao": [
+          {
+            "efeito": "Optical Flares e Light Trails",
+            "detalhes": "Rastros de luz gerados pelo movimento de emissores pontuais e reflexos de lentes artificiais reagindo ao ângulo de visão."
+          },
+          {
+            "efeito": "Volumetria Limitada",
+            "detalhes": "Iluminação que preenche o espaço vazio dentro da esfera com uma névoa brilhante dependente da densidade geométrica."
+          }
+        ]
+      },
+      {
+        "estilo": "Dinâmica de Fluidos 3D e Superfícies Orgânicas",
+        "descricao_geral": "Simulação de materiais amorfos e densos que não possuem forma fixa, capturando luz e sombra de maneira extremamente dramática.",
+        "comportamentos_animacao": [
+          {
+            "tecnica": "Displacement Animado",
+            "detalhes": "Uso de mapas de ruído tridimensionais (como Perlin ou Simplex noise) movendo-se através das coordenadas da malha para causar deformações irregulares."
+          },
+          {
+            "tecnica": "Mesclagem de Geometrias (Metaballs)",
+            "detalhes": "Volumes que se atraem e se fundem suavemente quando entram no raio de influência um do outro, como gotas de mercúrio."
+          }
+        ],
+        "efeitos_visuais_e_renderizacao": [
+          {
+            "efeito": "Material Metálico/Líquido Especular",
+            "detalhes": "Superfície com 100% de reflexividade (Roughness próximo a zero) para refletir o mapa de ambiente (HDRI) com extrema nitidez."
+          },
+          {
+            "efeito": "Iluminação de Alto Contraste",
+            "detalhes": "Uso de fundos completamente escuros para isolar os reflexos e realçar a percepção de volume através do contraste luz/sombra."
+          }
+        ]
+      },
+      {
+        "estilo": "Web UI Imersiva com Background Dinâmico",
+        "descricao_geral": "Design moderno típico de landing pages de alta conversão, onde os elementos de interface flutuam sobre um fundo vivo e reativo.",
+        "comportamentos_animacao": [
+          {
+            "tecnica": "Mesh Gradient Animation",
+            "detalhes": "Uma malha plana cujos vértices contêm diferentes cores que se movem lentamente de forma independente, criando um efeito de aurora boreal."
+          },
+          {
+            "tecnica": "Interação Objeto-Fundo",
+            "detalhes": "O posicionamento e movimento do elemento central de vidro altera ativamente a percepção visual do gradiente que está ao fundo, unificando a composição."
+          }
+        ],
+        "efeitos_visuais_e_renderizacao": [
+          {
+            "efeito": "Translucidez com Desfoque (Frosted Glass)",
+            "detalhes": "O material central refrata a luz mas também aplica um leve desfoque (blur) no fundo, reduzindo a complexidade visual e mantendo o foco na silhueta."
+          }
+        ]
+      },
+      {
+        "estilo": "Fragmentação e Geometria Mograph 3D",
+        "descricao_geral": "Focado na desconstrução geométrica e matemática de formas sólidas perfeitas, utilizando cloners e effectors.",
+        "comportamentos_animacao": [
+          {
+            "tecnica": "Ondulação de Superfície Poligonal",
+            "detalhes": "Elementos individuais (polígonos hexagonais) movem-se para frente e para trás no eixo Normal, gerando ondas físicas (ripples) na superfície da esfera."
+          },
+          {
+            "tecnica": "Animação por Efetores Baseados em Campo",
+            "detalhes": "Um objeto invisível (field) atravessa a malha, engatilhando mudanças de escala, rotação e posição nas instâncias clonadas apenas quando próximas."
+          }
+        ],
+        "efeitos_visuais_e_renderizacao": [
+          {
+            "efeito": "Sombreamento Facetado e Bevel",
+            "detalhes": "Bordas chanfradas (bevel) em cada segmento hexagonal para capturar filetes de luz (specular highlights), definindo a separação entre as peças."
+          },
+          {
+            "efeito": "Ambient Occlusion Dinâmico",
+            "detalhes": "Sombreamento de contato intenso que escurece os vãos entre os hexágonos à medida que eles se afastam ou se aproximam."
+          }
+        ]
+      }
+    ]
+  }
+}

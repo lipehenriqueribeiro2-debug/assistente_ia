@@ -1,0 +1,18 @@
+{
+  "tipo_transicao": "Dinâmica de Mola (Spring Physics Interpolation)",
+  "contexto_uso": "Modais, painéis laterais (sidebars), interações de arrastar/soltar (drag/swipe) e feedbacks de erro (shake).",
+  "gatilho": "Interação contínua de toque ou cursor (drag, pan, release).",
+  "comportamento_espacial": {
+    "origem": "Posição atual em tempo real no momento da interrupção do gesto.",
+    "movimento": "Trajetória calculada dinamicamente, mantendo o momentum (velocidade direcional) aplicado pelo usuário no momento da soltura."
+  },
+  "easing_e_timing": {
+    "parametros_fisicos": "Massa (Mass): 1, Rigidez da Mola (Stiffness): 120, Amortecimento (Damping): 14.",
+    "duracao_estimada": "Indefinida. O tempo é um subproduto da equação matemática da mola até atingir o estado de repouso."
+  },
+  "efeitos_visuais": {
+    "interrupcao_fluida": "Se o usuário agarrar o elemento no meio da animação de saída, não há salto visual; o vetor de força é recalculado imediatamente.",
+    "overshoot": "Ultrapassagem milimétrica e natural do limite final antes de estabilizar, simulando inércia física."
+  },
+  "descricao_detalhada": "Abandona as curvas de Bézier fixas baseadas em tempo. Ao fechar um modal via arrasto para baixo, a velocidade do arrasto é injetada na animação de saída. Isso significa que um movimento agressivo fechará o painel mais rápido e com mais 'pulo' no final da tela, enquanto um arrasto lento resultará em um fechamento suave e amortecido."
+}
