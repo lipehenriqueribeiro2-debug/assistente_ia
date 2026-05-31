@@ -1,213 +1,255 @@
-import { useState, useMemo, useEffect, useCallback, useRef, Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { useMotionValue, useSpring, useMotionValueEvent } from 'framer-motion';
-import { Bloom } from './components/BloomEffect';
+import { useState, useEffect, useCallback, Suspense, useRef } from 'react';
+import { Canvas, useThree, useFrame } from '@react-three/fiber';
+import { motion, AnimatePresence } from 'framer-motion';
+import * as THREE from 'three';
+import { AiCore } from './components/AiCore';
 import { OrbitalCarousel } from './components/OrbitalCarousel';
-import { CommandBar, type ModuleEntry } from './components/CommandBar';
-import { useSimulatedAudio } from './hooks/useSimulatedAudio';
-import { useTauriBackend } from './hooks/useTauriBackend';
+import { OverlayUI } from './components/OverlayUI';
+import { CommandBar } from './components/CommandBar';
 
-function hexToRgb(hex: string): [number, number, number] {
-  const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  if (!m) return [0, 0, 0];
-  return [parseInt(m[1], 16), parseInt(m[2], 16), parseInt(m[3], 16)];
-}
+const MODULE_ENTRIES = [
+  { key: 'infra', title: 'INFRA & AUTOMAÇÃO', aura: '#6b7280' },
+  { key: 'estudos', title: 'ESTUDOS UFBA', aura: '#6b7280' },
+  { key: 'rpg', title: 'RPG & CAMPANHAS', aura: '#6b7280' },
+  { key: 'hardware', title: 'HARDWARE & SISTEMA', aura: '#6b7280' },
+];
 
-function rgbToHex(r: number, g: number, b: number): string {
-  const clamp = (n: number) => Math.round(Math.max(0, Math.min(255, n)));
-  return `#${clamp(r).toString(16).padStart(2, '0')}${clamp(g).toString(16).padStart(2, '0')}${clamp(b).toString(16).padStart(2, '0')}`;
-}
+function ChatPanel({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const [messages, setMessages] = useState<string[]>([]);
+  const [input, setInput] = useState('');
 
-function lerpColor(from: string, to: string, t: number): string {
-  const [r1, g1, b1] = hexToRgb(from);
-  const [r2, g2, b2] = hexToRgb(to);
-  return rgbToHex(r1 + (r2 - r1) * t, g1 + (g2 - g1) * t, b1 + (b2 - b1) * t);
-}
+  const handleSend = () => {
+    if (!input.trim()) return;
+    setMessages((prev) => [...prev, input.trim()]);
+    setInput('');
+  };
 
-function useReducedMotion(): boolean {
-  const [reduced, setReduced] = useState(
-    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ x: '100%' }}
+          animate={{ x: 0 }}
+          exit={{ x: '100%' }}
+          transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+          style={{
+            position: 'fixed',
+            right: 0,
+            top: 0,
+            bottom: 0,
+            width: '30vw',
+            minWidth: 350,
+            background: 'rgba(255,255,255,0.4)',
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
+            borderLeft: '1px solid rgba(0,0,0,0.06)',
+            zIndex: 40,
+            display: 'flex',
+            flexDirection: 'column',
+            pointerEvents: 'auto',
+            boxShadow: '-4px 0 24px rgba(0,0,0,0.06)',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '14px 20px',
+              borderBottom: '1px solid rgba(0,0,0,0.06)',
+            }}
+          >
+            <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, fontWeight: 600, color: '#111827' }}>
+              Aura Interface
+            </span>
+            <button
+              onClick={onClose}
+              style={{ background: 'transparent', border: 'none', color: '#6b7280', fontSize: 18, cursor: 'pointer', padding: 4, lineHeight: 1 }}
+            >
+              ✕
+            </button>
+          </div>
+
+          <div style={{ flex: 1, overflowY: 'auto', padding: '20px 22px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div style={{ background: 'rgba(0,0,0,0.05)', color: '#374151', padding: '12px 16px', borderRadius: 10, width: 'fit-content', maxWidth: '85%', fontFamily: 'Inter, sans-serif', fontSize: 13 }}>
+              Sistema Aura iniciado. Aguardando comandos de orquestração.
+            </div>
+            <div style={{ background: '#ffffff', color: '#111827', border: '1px solid rgba(0,0,0,0.08)', padding: '12px 16px', borderRadius: 10, width: 'fit-content', maxWidth: '85%', alignSelf: 'flex-end', fontFamily: 'Inter, sans-serif', fontSize: 13 }}>
+              Status dos sub-agentes.
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', padding: '12px 16px', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+            <div style={{ flex: 1, position: 'relative' }}>
+              <input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') handleSend(); }}
+                placeholder="Digite sua mensagem..."
+                style={{
+                  width: '100%',
+                  background: 'rgba(255,255,255,0.5)',
+                  border: '1px solid rgba(0,0,0,0.08)',
+                  borderRadius: 100,
+                  padding: '12px 44px 12px 18px',
+                  fontFamily: "'IBM Plex Mono', monospace",
+                  fontSize: 12,
+                  color: '#111827',
+                  outline: 'none',
+                }}
+              />
+              <button
+                onClick={handleSend}
+                style={{ position: 'absolute', right: 6, top: '50%', transform: 'translateY(-50%)', background: 'transparent', border: 'none', color: '#6b7280', fontSize: 16, cursor: 'pointer', padding: '6px 8px' }}
+              >
+                ▶
+              </button>
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const handler = (e: MediaQueryListEvent) => setReduced(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
-  return reduced;
 }
 
-const NEUTRAL_AURA = '#3e3e4d';
-
-function useColorMorph(target: string): string {
-  const [color, setColor] = useState(target);
-  const fromRef = useRef(target);
-  const targetRef = useRef(target);
-  const startRef = useRef(0);
-  const rafRef = useRef<number>();
-
-  useEffect(() => {
-    if (target === targetRef.current) return;
-    fromRef.current = color;
-    targetRef.current = target;
-    startRef.current = performance.now();
-
-    const animate = (now: number) => {
-      const t = Math.min((now - startRef.current) / 1200, 1);
-      const eased = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-      setColor(lerpColor(fromRef.current, targetRef.current, eased));
-      if (t < 1) rafRef.current = requestAnimationFrame(animate);
-    };
-
-    rafRef.current = requestAnimationFrame(animate);
-    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
-  }, [target]);
-
-  return color;
-}
-
-const MODULES: Record<string, { title: string; aura: string; mono?: boolean }> = {
-  orquestracao: {
-    title: 'Infra & Automação',
-    aura: '#a92727',
-    mono: true,
-  },
-  estudos: {
-    title: 'Sistemas de Potência',
-    aura: '#0066ff',
-  },
-  spotifySync: {
-    title: 'Controle de Mídia',
-    aura: '#b829ff',
-    mono: true,
-  },
+const ALIGNMENT_MAP: Record<string, { pos: [number, number, number]; rot: [number, number, number] }> = {
+  orq: { pos: [3.2, -1.8, 1.5], rot: [0.05, -0.15, 0] },
+  est: { pos: [2.8, -2.0, 1.2], rot: [0.02, -0.05, 0] },
+  rpg: { pos: [3.8, -1.5, 0.8], rot: [0.08, -0.2, 0] },
+  hw: { pos: [3.5, -2.2, 1.8], rot: [0.03, -0.1, 0] },
 };
 
-const MODULE_ENTRIES: ModuleEntry[] = Object.keys(MODULES).map((key) => ({
-  key,
-  title: MODULES[key].title,
-  aura: MODULES[key].aura,
-}));
+function CameraController() {
+  const { camera } = useThree();
+  useEffect(() => {
+    camera.position.set(0, 0, 10);
+    camera.lookAt(0, 0, 0);
+  }, []);
+  return null;
+}
 
-const MODULE_KEYS = Object.keys(MODULES);
+function Stage({ focusedAgent, children }: { focusedAgent: string | null; children: React.ReactNode }) {
+  const stagePos = useRef(new THREE.Vector3(4.0, -0.5, -2.0));
+  const stageRot = useRef(new THREE.Euler(Math.PI / 6, 0, -Math.PI / 16));
+  const masterRef = useRef<THREE.Group>(null);
+
+  useEffect(() => {
+    if (focusedAgent && ALIGNMENT_MAP[focusedAgent]) {
+      const target = ALIGNMENT_MAP[focusedAgent];
+      stagePos.current.set(target.pos[0], target.pos[1], target.pos[2]);
+      stageRot.current.set(target.rot[0], target.rot[1], target.rot[2]);
+    } else {
+      stagePos.current.set(4.0, -0.5, -2.0);
+      stageRot.current.set(Math.PI / 6, 0, -Math.PI / 16);
+    }
+  }, [focusedAgent]);
+
+  useFrame(() => {
+    if (!masterRef.current) return;
+    masterRef.current.position.lerp(stagePos.current, 0.05);
+    masterRef.current.rotation.x = THREE.MathUtils.lerp(masterRef.current.rotation.x, stageRot.current.x, 0.05);
+    masterRef.current.rotation.y = THREE.MathUtils.lerp(masterRef.current.rotation.y, stageRot.current.y, 0.05);
+    masterRef.current.rotation.z = THREE.MathUtils.lerp(masterRef.current.rotation.z, stageRot.current.z, 0.05);
+  });
+
+  return <group ref={masterRef} scale={1.25}>{children}</group>;
+}
 
 function App() {
-  const [openModals, setOpenModals] = useState<Record<string, boolean>>(
-    Object.fromEntries(MODULE_KEYS.map((k) => [k, false]))
-  );
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const [commandBarOpen, setCommandBarOpen] = useState(false);
-
-  const rawX = useMotionValue(0);
-  const rawY = useMotionValue(0);
-  const smoothX = useSpring(rawX, { stiffness: 120, damping: 20 });
-  const smoothY = useSpring(rawY, { stiffness: 120, damping: 20 });
-
-  const [mouseX, setMouseX] = useState(0);
-  const [mouseY, setMouseY] = useState(0);
-
-  useMotionValueEvent(smoothX, 'change', (v) => setMouseX(v));
-  useMotionValueEvent(smoothY, 'change', (v) => setMouseY(v));
-
-  const handleMouseMove = useMemo(() => (e: React.MouseEvent) => {
-    rawX.set((e.clientX / window.innerWidth) * 2 - 1);
-    rawY.set(-(e.clientY / window.innerHeight) * 2 + 1);
-  }, [rawX, rawY]);
-
-  const bass = useSimulatedAudio();
-  const { logs, sendCommand: tauriSendCommand } = useTauriBackend();
-  const reducedMotion = useReducedMotion();
+  const [focusedAgent, setFocusedAgent] = useState<string | null>(null);
+  const focusedPos = useRef<THREE.Vector3>(new THREE.Vector3());
 
   const closeCommandBar = useCallback(() => setCommandBarOpen(false), []);
 
-  const handleSendCommand = useCallback((command: string) => {
-    const lower = command.toLowerCase();
-    const targetKey = lower.includes('infra') || lower.includes('automacao') || lower.includes('pipeline')
-      ? 'orquestracao'
-      : lower.includes('estudo') || lower.includes('potencia') || lower.includes('academico')
-      ? 'estudos'
-      : lower.includes('musica') || lower.includes('midia') || lower.includes('spotify') || lower.includes('audio')
-      ? 'spotifySync'
-      : 'orquestracao';
-
-    setOpenModals((prev) => ({ ...prev, [targetKey]: true }));
-    tauriSendCommand(command);
-  }, [tauriSendCommand]);
-
-  const navigateToModule = useCallback((key: string) => {
-    setOpenModals((prev) => ({ ...prev, [key]: true }));
+  const handleAgentClick = useCallback((id: string, index: number) => {
+    setFocusedAgent((prev) => (prev === id ? null : id));
   }, []);
-
-  const closeAllPanels = useCallback(() => {
-    setOpenModals((prev) => {
-      const next = { ...prev };
-      for (const k of Object.keys(next)) next[k] = false;
-      return next;
-    });
-  }, []);
-
-  const anyPanelOpen = Object.values(openModals).some(Boolean);
-
-  const activeKey = useMemo(
-    () => Object.entries(openModals).find(([, v]) => v)?.[0] ?? null,
-    [openModals]
-  );
-
-  const targetColor = activeKey ? MODULES[activeKey].aura : NEUTRAL_AURA;
-  const morphColor = useColorMorph(targetColor);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
-        if (anyPanelOpen) {
-          closeAllPanels();
-        } else {
-          setCommandBarOpen((prev) => !prev);
-        }
+        setCommandBarOpen((prev) => !prev);
       }
-      if (e.key === 'Escape' && anyPanelOpen) {
-        closeAllPanels();
+      if (e.key === 'Escape') {
+        if (isChatOpen) { setIsChatOpen(false); return; }
+        if (focusedAgent) { setFocusedAgent(null); return; }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [anyPanelOpen, closeAllPanels]);
+  }, [isChatOpen, focusedAgent]);
 
   return (
-    <div
-      onMouseMove={handleMouseMove}
-      style={{ '--primary': morphColor, width: '100vw', height: '100vh', background: 'var(--canvas-night)', position: 'relative', overflow: 'hidden' } as React.CSSProperties}
-    >
+    <div style={{ width: '100vw', height: '100vh', background: '#F5F5F7', position: 'relative', overflow: 'hidden' }}>
       <div data-tauri-drag-region style={{ position: 'fixed', top: 0, left: 0, right: 0, height: 28, zIndex: 100 }} />
 
       <div style={{ position: 'fixed', inset: 0, zIndex: 0 }}>
-        <Canvas dpr={[1, 2]} gl={{ alpha: true }} camera={{ position: [0, 0, 12], fov: 50 }}>
-          <color attach="background" args={['#06090f']} />
-          <ambientLight intensity={0.2} />
-
-          <Suspense fallback={null}>
-            <OrbitalCarousel
-              modules={MODULE_ENTRIES}
-              activeKey={activeKey}
-              logs={logs}
-              color={morphColor}
-              mouseX={mouseX}
-              mouseY={mouseY}
-              bass={bass}
-              reducedMotion={reducedMotion}
-            />
-          </Suspense>
-
-          <Bloom threshold={1.2} intensity={1.5} />
+        <Canvas dpr={[1, 2]} gl={{ alpha: true }} camera={{ position: [0, 0, 10], fov: 45 }}>
+          <color attach="background" args={['#F5F5F7']} />
+          <ambientLight intensity={0.8} />
+          <directionalLight position={[10, 10, 10]} intensity={2} />
+          <CameraController />
+          <Stage focusedAgent={focusedAgent}>
+            <Suspense fallback={null}>
+              <AiCore />
+            </Suspense>
+            <Suspense fallback={null}>
+              <OrbitalCarousel focusedAgent={focusedAgent} onAgentClick={handleAgentClick} focusedPos={focusedPos} />
+            </Suspense>
+          </Stage>
         </Canvas>
       </div>
+
+      <OverlayUI focusedAgent={focusedAgent} onClose={() => setFocusedAgent(null)} />
+
+      <motion.button
+        onClick={() => setIsChatOpen((prev) => !prev)}
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+          style={{
+            position: 'fixed',
+            top: 40,
+            right: 48,
+            zIndex: 50,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            padding: '10px 20px',
+            background: 'rgba(255,255,255,0.5)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            border: '1px solid rgba(0,0,0,0.06)',
+            borderRadius: 100,
+            color: '#374151',
+            fontFamily: 'Inter, sans-serif',
+            fontSize: 13,
+            fontWeight: 500,
+            cursor: 'pointer',
+            pointerEvents: 'auto',
+          }}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+            <line x1="12" y1="19" x2="12" y2="23" />
+            <line x1="8" y1="23" x2="16" y2="23" />
+          </svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg>
+          <span style={{ marginLeft: 4 }}>Aura AI</span>
+        </motion.button>
+
+      <ChatPanel isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
 
       <CommandBar
         isOpen={commandBarOpen}
         onClose={closeCommandBar}
         modules={MODULE_ENTRIES}
-        onSelect={navigateToModule}
-        onSendCommand={handleSendCommand}
+        onSelect={() => {}}
       />
     </div>
   );

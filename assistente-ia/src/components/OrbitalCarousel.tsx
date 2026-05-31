@@ -1,185 +1,166 @@
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Html } from '@react-three/drei';
-import { AiCore } from './AiCore';
+import { Trail } from '@react-three/drei';
 import * as THREE from 'three';
+import {
+  ShatteredMonolith,
+  MobiusKnot,
+  Astrolabe,
+  FrequencyCrystal,
+} from './SubAgentArtifacts';
 
-const RADIUS = 3;
-const PANEL_W = 1.4;
-const PANEL_H = 2.2;
-const PI2 = Math.PI * 2;
+const AGENTS_DATA = [
+  { id: 'orq', radius: 3.6, offset: 0, Component: ShatteredMonolith },
+  { id: 'est', radius: 4.2, offset: Math.PI / 2, Component: MobiusKnot },
+  { id: 'rpg', radius: 4.8, offset: Math.PI, Component: Astrolabe },
+  { id: 'hw', radius: 5.4, offset: Math.PI * 1.5, Component: FrequencyCrystal },
+];
 
-function shortestArc(from: number, to: number): number {
-  let d = (to - from) % PI2;
-  if (d < 0) d += PI2;
-  return d > Math.PI ? d - PI2 : d;
-}
-
-const moduleLineStyle: React.CSSProperties = {
-  fontFamily: "'IBM Plex Mono', monospace",
-  fontSize: 10,
-  lineHeight: '16px',
-  letterSpacing: '-0.5px',
-  color: '#cbd5e1',
-  whiteSpace: 'nowrap',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-};
-
-const activeTitleStyle: React.CSSProperties = {
-  fontFamily: 'Inter, system-ui, sans-serif',
-  fontSize: 12,
-  fontWeight: 600,
-  letterSpacing: '-0.2px',
-  color: '#fcfdff',
-  marginBottom: 8,
-};
-
-interface ModuleNodeProps {
-  index: number;
-  total: number;
-  title: string;
-  aura: string;
-  isActive: boolean;
-  logs: string[];
-}
-
-function ModuleNode({ index, total, title, aura, isActive, logs }: ModuleNodeProps) {
-  const groupRef = useRef<THREE.Group>(null);
-  const meshRef = useRef<THREE.Mesh>(null);
-  const worldPos = useMemo(() => new THREE.Vector3(), []);
-
-  const angle = (index / total) * PI2;
-  const x = Math.sin(angle) * RADIUS;
-  const z = Math.cos(angle) * RADIUS;
-
-  useFrame(() => {
-    if (!meshRef.current) return;
-    meshRef.current.getWorldPosition(worldPos);
-    const zNorm = Math.max(0, Math.min(1, (worldPos.z / RADIUS) * 0.5 + 0.5));
-    const opacity = 0.08 + 0.92 * zNorm;
-    const scale = 0.5 + 0.5 * zNorm;
-    const mat = meshRef.current.material as THREE.Material;
-    mat.opacity = isActive ? Math.max(opacity, 0.6) : opacity * 0.25;
-    mat.transparent = true;
-    groupRef.current?.scale.setScalar(scale);
-  });
+function RingLine({ radius }: { radius: number }) {
+  const points = useMemo(() => {
+    const pts: THREE.Vector3[] = [];
+    const segs = 80;
+    for (let i = 0; i <= segs; i++) {
+      const theta = (i / segs) * Math.PI * 2;
+      pts.push(new THREE.Vector3(Math.sin(theta) * radius, 0, Math.cos(theta) * radius));
+    }
+    return pts;
+  }, [radius]);
 
   return (
-    <group ref={groupRef} position={[x, 0, z]} rotation={[0, angle, 0]}>
-      <mesh ref={meshRef}>
-        <planeGeometry args={[PANEL_W, PANEL_H]} />
-        {isActive ? (
-          <meshPhysicalMaterial
-            transmission={0.6}
-            roughness={0.2}
-            metalness={0}
-            ior={1.5}
-            thickness={0.3}
-            color="#0b1120"
-            transparent
-            opacity={0.6}
-            envMapIntensity={0.3}
-            side={THREE.DoubleSide}
-          />
-        ) : (
-          <meshBasicMaterial
-            color="#0b1120"
-            transparent
-            opacity={0.15}
-            side={THREE.DoubleSide}
-          />
-        )}
-      </mesh>
-
-      {isActive && logs.length > 0 && (
-        <Html transform occlude style={{ width: '200px', pointerEvents: 'none' }}>
-          <div style={{ padding: '12px 16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: aura, flexShrink: 0 }} />
-              <span style={activeTitleStyle}>{title}</span>
-            </div>
-            {logs.map((line, i) => (
-              <div key={i} style={moduleLineStyle}>{line}</div>
-            ))}
-          </div>
-        </Html>
-      )}
-
-      {!isActive && (
-        <Html transform occlude style={{ width: '140px', pointerEvents: 'none' }}>
-          <div style={{ padding: '8px 12px', textAlign: 'center' }}>
-            <span style={{
-              fontFamily: 'Inter, system-ui, sans-serif',
-              fontSize: 11,
-              fontWeight: 500,
-              letterSpacing: '-0.15px',
-              color: '#64748b',
-            }}>
-              {title}
-            </span>
-          </div>
-        </Html>
-      )}
-    </group>
+    <line>
+      <bufferGeometry>
+        <bufferAttribute
+          attach="attributes-position"
+          array={new Float32Array(points.flatMap((p) => [p.x, p.y, p.z]))}
+          count={points.length}
+          itemSize={3}
+        />
+      </bufferGeometry>
+      <lineBasicMaterial color="#999999" transparent opacity={0.25} />
+    </line>
   );
 }
 
 interface OrbitalCarouselProps {
-  modules: { key: string; title: string; aura: string; mono?: boolean }[];
-  activeKey: string | null;
-  logs: Record<string, string[]>;
-  color: string;
-  mouseX: number;
-  mouseY: number;
-  bass: number;
-  reducedMotion: boolean;
+  focusedAgent: string | null;
+  onAgentClick: (id: string, index: number) => void;
+  focusedPos: React.MutableRefObject<THREE.Vector3>;
 }
 
-export function OrbitalCarousel({ modules, activeKey, logs, color, mouseX, mouseY, bass, reducedMotion }: OrbitalCarouselProps) {
-  const groupRef = useRef<THREE.Group>(null);
-  const currentAngle = useRef(0);
-  const velocity = useRef(0);
-  const targetAngle = useRef(0);
-  const prevActiveKey = useRef(activeKey);
+export function OrbitalCarousel({ focusedAgent, onAgentClick, focusedPos }: OrbitalCarouselProps) {
+  const targetVelocity = useRef(0);
+  const currentVelocity = useRef(0);
+  const globalAngle = useRef(0);
+  const agentRefs = useRef<(THREE.Group | null)[]>(new Array(AGENTS_DATA.length).fill(null));
+  const targetGlobalAngle = useRef<number | null>(null);
 
-  if (activeKey !== prevActiveKey.current) {
-    prevActiveKey.current = activeKey;
-    const idx = modules.findIndex((m) => m.key === activeKey);
-    if (idx >= 0) {
-      targetAngle.current = -((idx / modules.length) * PI2);
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      if (focusedAgent) return;
+      targetVelocity.current += e.deltaY * 0.0015;
+    };
+    window.addEventListener('wheel', handleWheel, { passive: true });
+    return () => window.removeEventListener('wheel', handleWheel);
+  }, [focusedAgent]);
+
+  useEffect(() => {
+    if (focusedAgent) {
+      const agent = AGENTS_DATA.find(a => a.id === focusedAgent);
+      if (agent) {
+        const baseTarget = (Math.PI / 2) - agent.offset;
+        const current = globalAngle.current;
+        const diff = ((baseTarget - current) % (Math.PI * 2) + (Math.PI * 2)) % (Math.PI * 2);
+        const shortestDiff = diff > Math.PI ? diff - Math.PI * 2 : diff;
+        targetGlobalAngle.current = current + shortestDiff;
+      }
+    } else {
+      targetGlobalAngle.current = null;
     }
-  }
+  }, [focusedAgent]);
 
-  useFrame((_, delta) => {
-    const dt = Math.min(delta, 0.05);
-    const diff = shortestArc(currentAngle.current, targetAngle.current);
-    const springForce = 120 * diff;
-    const dampForce = -14 * velocity.current;
-    const accel = springForce + dampForce;
-    velocity.current += accel * dt;
-    currentAngle.current += velocity.current * dt;
-
-    if (groupRef.current) {
-      groupRef.current.rotation.y = currentAngle.current;
+  useFrame((state, delta) => {
+    if (focusedAgent && targetGlobalAngle.current !== null) {
+      globalAngle.current = THREE.MathUtils.lerp(globalAngle.current, targetGlobalAngle.current, 0.05);
+    } else if (!focusedAgent) {
+      currentVelocity.current = THREE.MathUtils.damp(currentVelocity.current, targetVelocity.current, 5, delta);
+      targetVelocity.current = THREE.MathUtils.damp(targetVelocity.current, 0, 8, delta);
+      globalAngle.current += (0.05 * delta) + (currentVelocity.current * delta);
     }
+
+    AGENTS_DATA.forEach((agent, i) => {
+      const grp = agentRefs.current[i];
+      if (!grp) return;
+
+      const angle = globalAngle.current + agent.offset;
+      const baseX = Math.cos(angle) * agent.radius;
+      const baseZ = Math.sin(angle) * agent.radius;
+
+      if (focusedAgent === agent.id) {
+        grp.position.x = baseX;
+        grp.position.z = baseZ;
+        const time = state.clock.elapsedTime;
+        switch (agent.id) {
+          case 'orq':
+            grp.position.y = THREE.MathUtils.lerp(grp.position.y, Math.sin(time * 8) * 0.15, 0.1);
+            grp.rotation.z = THREE.MathUtils.lerp(grp.rotation.z, Math.sin(time * 4) * 0.1, 0.1);
+            break;
+          case 'est':
+            grp.rotation.x += delta * 3.5;
+            grp.rotation.z -= delta * 2.0;
+            grp.position.y = THREE.MathUtils.lerp(grp.position.y, 0, 0.1);
+            break;
+          case 'rpg':
+            grp.position.y = THREE.MathUtils.lerp(grp.position.y, Math.sin(time * 2) * 0.3, 0.05);
+            grp.rotation.y += delta * 0.4;
+            grp.rotation.x += delta * 0.2;
+            break;
+          case 'hw':
+            grp.position.z = THREE.MathUtils.lerp(grp.position.z, baseZ + Math.sin(time * 5) * 0.4, 0.1);
+            grp.rotation.set(0, 0, 0);
+            break;
+        }
+      } else {
+        grp.position.set(baseX, 0, baseZ);
+        if (focusedAgent) {
+          grp.rotation.y = THREE.MathUtils.damp(grp.rotation.y, 0, 4, delta);
+          grp.rotation.x = THREE.MathUtils.damp(grp.rotation.x, 0, 4, delta);
+          grp.rotation.z = THREE.MathUtils.damp(grp.rotation.z, 0, 4, delta);
+        }
+      }
+    });
   });
 
   return (
-    <group ref={groupRef}>
-      <AiCore color={color} mouseX={mouseX} mouseY={mouseY} bass={bass} reducedMotion={reducedMotion} modules={modules} activeKey={activeKey} />
-
-      {modules.map((mod, i) => (
-        <ModuleNode
-          key={mod.key}
-          index={i}
-          total={modules.length}
-          title={mod.title}
-          aura={mod.aura}
-          isActive={mod.key === activeKey}
-          logs={logs[mod.key] || []}
-        />
-      ))}
+    <group>
+      {AGENTS_DATA.map((agent, i) => {
+        const Component = agent.Component;
+        return (
+          <group key={agent.id} castShadow={false} receiveShadow={false}>
+            <RingLine radius={agent.radius} />
+            <group ref={(el) => { agentRefs.current[i] = el; }} castShadow={false} receiveShadow={false}>
+              <Trail width={0.1} length={4} decay={1} local={false} stride={0} attenuation={(t) => t * t}>
+                <Component isFocused={false} />
+              </Trail>
+              <mesh
+                visible={false}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (focusedAgent === agent.id) return;
+                  const grp = agentRefs.current[i];
+                  if (grp) grp.getWorldPosition(focusedPos.current);
+                  onAgentClick(agent.id, i);
+                }}
+                onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = 'pointer'; }}
+                onPointerOut={(e) => { e.stopPropagation(); document.body.style.cursor = 'auto'; }}
+              >
+                <sphereGeometry args={[2.0, 16, 16]} />
+                <meshBasicMaterial />
+              </mesh>
+            </group>
+          </group>
+        );
+      })}
     </group>
   );
 }

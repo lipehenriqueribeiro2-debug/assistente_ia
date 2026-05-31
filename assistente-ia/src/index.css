@@ -1,18 +1,12 @@
 :root {
-  --canvas-night: #0b1120;
-  --surface-night: #1e293b;
-  --hairline: #3e3e4d;
-  --glass-bg: rgba(30, 41, 59, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.08);
+  --canvas-night: #F5F5F7;
+  --surface-night: #e5e5e7;
+  --hairline: #d4d4d4;
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(0, 0, 0, 0.06);
   --glass-blur: 16px;
 
-  --crimson: #a92727;
-  --cobalto: #0066ff;
-  --magenta: #b829ff;
-  --esmeralda: #3ecf8e;
-  --ciano: #25ced1;
-
-  --primary: var(--cobalto);
+  --primary: #6b7280;
 }
 
 * {
@@ -22,7 +16,7 @@
 }
 
 body {
-  background: var(--canvas-night);
+  background: #F5F5F7;
   overflow: hidden;
   height: 100vh;
   width: 100vw;

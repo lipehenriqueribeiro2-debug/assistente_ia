@@ -13,13 +13,14 @@ export function Bloom({ threshold = 1.2, intensity = 1.5 }: { threshold?: number
     const bloom = new BloomEffect({ luminanceThreshold: threshold, intensity, mipmapBlur: true });
     composer.addPass(new EffectPass(camera, bloom));
 
-    const originalRender = state.render;
-    state.render = (() => {
+    const s = state as any;
+    const originalRender = s.render;
+    s.render = (() => {
       composer.render();
     }) as typeof originalRender;
 
     return () => {
-      state.render = originalRender;
+      s.render = originalRender;
       composer.dispose();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

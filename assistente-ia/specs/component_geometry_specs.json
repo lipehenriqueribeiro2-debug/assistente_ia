@@ -1,0 +1,92 @@
+{
+  "project_mode": "Grayboxing / Monochromatic Estrito",
+  "environment": {
+    "background_color": "#F5F5F7",
+    "ambient_light_intensity": 0.2,
+    "directional_light": {
+      "position": [5, 10, 5],
+      "intensity": 1.0,
+      "cast_shadows": true
+    }
+  },
+  "materials": {
+    "core_internal": {
+      "type": "MeshStandardMaterial",
+      "color": "#2A2A2A",
+      "roughness": 0.5
+    },
+    "core_external_wireframe": {
+      "type": "MeshStandardMaterial",
+      "color": "#D1D1D1",
+      "wireframe": true
+    },
+    "subagents_crystal": {
+      "type": "MeshPhysicalMaterial",
+      "color": "#FFFFFF",
+      "transmission": 1.0,
+      "roughness": 0.1,
+      "ior": 1.5,
+      "clearcoat": 1.0
+    }
+  },
+  "components": {
+    "dual_core": {
+      "id": "ai_core_central",
+      "scale_vh": "30vh",
+      "position": [0, 0, 0],
+      "layers": {
+        "internal_sphere": {
+          "geometry": "IcosahedronGeometry (detail: 2)",
+          "animation": "Vertex Noise / Deformação física irregular contínua imitando pulsação orgânica/mecânica em useFrame. Rotação lenta no eixo Y."
+        },
+        "external_shell": {
+          "geometry": "Icosaedro Truncado (Procedural: Pentágonos e Hexágonos)",
+          "animation": "Pulsação harmônica sutil de escala acompanhando o núcleo interno. Rotação inversa no eixo Y."
+        }
+      }
+    },
+    "orbital_carousel": {
+      "id": "carousel_root",
+      "radius": 5.0,
+      "interaction": {
+        "input": "Mouse Wheel / Scroll Global",
+        "behavior": "A rolagem incrementa/decrementa infinitamente o targetRotationY (loop contínuo). Suavização via THREE.MathUtils.damp no useFrame.",
+        "selection": "Clique no agente ou comando do menu aciona foco ativo."
+      },
+      "camera_dynamics": {
+        "idle_state": "Visão orbital isométrica geral afastada.",
+        "focused_state": "Zoom-in suave nas coordenadas X, Y, Z do agente selecionado, adotando um ângulo dramático de inclinação."
+      }
+    },
+    "subagents": [
+      {
+        "id": "orchestrator_01",
+        "title": "Infra & Automação",
+        "geometry": "Monólito Estilhaçado",
+        "description": "Grupo de 3 a 4 paralelepípedos retangulares, estreitos e verticais, flutuando paralelamente com eixos ligeiramente deslocados. Giram em uníssono.",
+        "focus_animation": "Expansão mecânica (afastamento sutil dos blocos em relação ao próprio centro do objeto)."
+      },
+      {
+        "id": "focus_01",
+        "title": "Sistemas de Potência",
+        "geometry": "Fita de Möbius / Torus Knot",
+        "description": "TorusKnotGeometry com parâmetros de torção geométrica complexa e contínua.",
+        "focus_animation": "Aceleração do fluxo de torção interna."
+      },
+      {
+        "id": "campaign_01",
+        "title": "World-building & Lore",
+        "geometry": "Astrolábio Vazio",
+        "description": "Três anéis concêntricos finos (Nested Rings) orbitando em eixos X, Y e Z independentes, mantendo o centro absoluto vazio.",
+        "focus_animation": "Alinhamento temporário dos eixos dos anéis."
+      },
+      {
+        "id": "media_01",
+        "title": "Controle de Mídia",
+        "geometry": "Cristal de Frequência",
+        "description": "Icosaedro modificado, fortemente esticado e pontiagudo no eixo Y, assemelhando-se a um prisma de quartzo bruto.",
+        "focus_animation": "Pulsação escalar vertical proporcional ao ritmo simulado."
+      }
+    ]
+  }
+}
