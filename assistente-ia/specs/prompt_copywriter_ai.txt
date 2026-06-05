@@ -1,19 +1,16 @@
-Você é um redator sênior de marca e interface. Escreva a microcópia para um sistema operacional modular (Aura OS) com este briefing:
+Você é um Redator Técnico Sênior de Marca e Interface. Escreva a microcópia para o AURA_OS, um sistema operacional de orquestração local.
 
-BRIEF:
-- Sentimento: Um núcleo pulsante e responsivo, como um coração orbital multifacetado.
-- Público: O construtor meticuloso que arquiteta múltiplos agentes do zero.
-- Anti-público: O usuário casual de emojis ou quem teme o terminal.
-- Objeto hero: O núcleo 3D (esfera hexagonal contida em casca vazada).
-- Trabalho: Orquestrar.
-- Memória de três segundos: Uma inteligência esférica isolada e silenciosa no vazio, desejando ser comandada.
+BRIEFING DE AUDIÊNCIA:
+O usuário é um engenheiro e construtor meticuloso. Ele não quer interfaces amigáveis, emojis ou assistentes falantes. Ele quer um terminal cirúrgico.
+Tom: Imperativo, cru, técnico, silencioso. 
+Palavras proibidas: moderno, limpo, minimalista, premium, dinâmico, destreza.
 
-TOM: Combine com o sentimento. O usuário não deve ler um manual — ele deve sentir que está operando um terminal de comando cirúrgico. Frases curtas, imperativas, sem preenchimento. Palavras proibidas: moderno, limpo, minimalista, premium, profissional, dinâmico, produtivo.
-
-OUTPUT:
-1. Placeholder para a barra de comando vazia (máx 4 palavras).
-2. Títulos curtos para os modais efêmeros de: Estudos, Finanças, Infraestrutura e Spotify.
-3. Microcópia para estado de execução de agentes ("Executando", "Aguardando", "Falha").
-4. Mensagem de log inicial de inicialização do núcleo (uma frase).
-
-Retorne como JSON.
+SAÍDAS EXIGIDAS (Retorne em JSON estruturado):
+1. Placeholder da barra global de comandos (máx 4 palavras focadas em execução).
+2. Nomenclatura técnica e 1 linha de log de status para os 4 Agentes do Bento Grid:
+   - Agente de Orquestração (Foco: Prefect, Python, SQL, Docker).
+   - Agente Estudos UFBA (Foco: LaTeX, Sistemas de Potência, Fator de Potência 0.2, Transmissão 50 Hz).
+   - Agente RPG & Campanhas (Foco: Gerenciamento de 8 jogadores, Status de Skullport e Saint's Bay).
+   - Agente Hardware (Foco: Telemetria, CPU, RMA Corsair, Apple Watch).
+3. Estados curtos de pipeline ("Executando", "Compilando", "Falha de Kernel").
+4. Mensagem de boot inicial do sistema (Máximo de 6 palavras demonstrando inicialização a frio).

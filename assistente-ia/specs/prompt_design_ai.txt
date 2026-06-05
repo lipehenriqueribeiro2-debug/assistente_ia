@@ -1,20 +1,11 @@
-Crie a especificação de layout (UI spec) para um sistema operacional focado em teclado com estas regras:
+Atue como Arquiteto de Software React/Next.js. Desenvolva o frontend do AURA_OS com foco absoluto em performance, integrando o DOM ao React Three Fiber.
 
-VISUAL DECISIONS:
-- Sentimento: Um núcleo pulsante e responsivo, como um coração orbital multifacetado.
-- Objeto hero: O núcleo 3D (esfera hexagonal contida em casca vazada).
-- Trabalho: Orquestrar.
+STACK E ARQUITETURA:
+- React + Tailwind CSS + Framer Motion (obrigatório para orquestração de UI).
+- O Canvas 3D deve ficar isolado de re-renderizações do React. Use `useRef` e `useMemo` rigorosamente.
+- Layout: O HTML não pode ter fundos opacos gigantes. O `<main>` envolve o 3D, e o `<Header>` (fixed z-50) e o `<OverlayUI>` (absolute z-40) flutuam por cima.
 
-STYLE LOGICS:
-- Cor: O espaço é um vácuo negro monocromático. A interface atua como vidro translúcido escuro (rgba(30, 41, 59, 0.6) + backdrop-filter: blur(16px)). Toda a cor (Fagulha) vem de estados ativos que herdam a cor do núcleo 3D. Sem box-shadows.
-- Tipo: Tipografia sem-serifa compactada (Inter, letter-spacing negativo) para editorial, separada por fronteiras rígidas de 1px (hairline #3e3e4d) da tipografia monoespaçada mecânica (IBM Plex Mono) usada para dados.
-- Espacial: O núcleo é o centro gravitacional; sem barras fixas ou contêineres permanentes. Apenas painéis de vidro translúcido efêmeros orbitam o núcleo quando invocados.
-
-SECTIONS:
-- Fundo contínuo (AiCore Canvas).
-- Barra de comando universal flutuante (tipo Raycast, invocável via atalho).
-- Modais translúcidos efêmeros para execução de sub-agentes.
-
-LAYOUT RULES:
-- Zero barras laterais, zero navegação de topo, zero widgets estáticos.
-- A barra de comando e modais aparecem sobre o núcleo em z-index elevado (Glassmorphism), respeitando limites geométricos rígidos.
+FUNCIONALIDADES COREOGRAFADAS:
+- Bento Grids (Apresentação de Dados): Devem implementar Staggered Animation no Framer Motion. Os elementos internos (textos, gráficos de barra) animam em cascata.
+- Layout Morphing (Transição de Tela): Abandone a troca de páginas tradicional. A transição da Visão Orbital para a Tela de Chat deve usar `<AnimatePresence mode="wait">`. 
+- Animação de Saída (Awwwards Style): O texto do ambiente orbital não apenas some; ele usa física de mola (Spring) para quebrar as linhas e voar para fora do eixo Y negativo independentemente, limpando o palco antes do chat se materializar.

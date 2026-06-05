@@ -1,24 +1,58 @@
-# Logs
-logs
+# Dependências locais
+node_modules/
+
+# Builds e Saídas
+dist/
+dist-ssr/
+build/
+tmp/
+
+# Rust e Tauri (Compilação e Alvos no subprojeto)
+src-tauri/target/
+*.rs.bk
+*.exe
+*.dll
+*.so
+*.dylib
+*.pdb
+
+# Logs de Execução e Debug
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Variáveis de Ambiente e Segredos
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
 
-# Editor directories and files
+# Editores de Código e IDEs
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+*~
+
+# Arquivos do Sistema Operacional
+.DS_Store
+Thumbs.db
+
+# Configurações e Caches do Assistente / Agente IA (Local)
+.gemini/
+.agent/
+.agents/
+.opencode/
+*skills/
+*skill/
+.agent/skills/
+.agents/skills/
+

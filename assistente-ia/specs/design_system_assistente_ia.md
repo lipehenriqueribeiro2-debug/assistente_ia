@@ -1,75 +1,85 @@
-# Design System: Frost & Crimson (Minimalismo Enriquecido)
+# Design System: AURA OS (Frost & Crimson)
 
-## 1. Filosofia e Visão Geral
-Este design system opera em um modelo de **tensão controlada e presença viva**. A interface utiliza a predominância de tons frios (gélidos) e fundos escuros estruturais para criar um ambiente de foco técnico. 
+## Overview
 
-A grande assinatura do projeto é a simbiose entre a interface 2D (painéis, tabelas, modais) e um **Núcleo de IA 3D omnipresente**, que atua como o coração pulsante do assistente. Não há gradientes decorativos estáticos; a profundidade e a vida da aplicação vêm da iluminação dinâmica do modelo 3D ao fundo e do uso estratégico de *Glassmorphism* nas camadas de navegação superior.
+O sistema final opera numa filosofia de **tensão controlada**. Inspirado pela leveza da Apple e do Airbnb, a UI 2D é majoritariamente limpa, translúcida e com sombras mínimas. A profundidade da aplicação provém inteiramente do **AiCore 3D** rodando ao fundo, que lança luz dinâmica sobre os painéis de _glassmorphism_. O sistema é multi-tema reativo: a cor de destaque (Primary) muda fisicamente de acordo com o módulo (Agente) acessado.
 
----
+## 1. Modular Color Tokens
 
-## 2. Identidade Modular (Color Tokens)
+O sistema possui a base _Frost_ (tons noturnos/gélidos para o vácuo) e a injeção do _Crimson_ (ou outras cores) baseada no estado.
 
-A aplicação é dividida em módulos contextuais. A base estrutural (fundos e textos) permanece a mesma, mas a cor de sotaque (Accent/Primary) transiciona de forma fluida dependendo do contexto em que o usuário se encontra.
+**Superfícies (Imutáveis):**
 
-### 2.1. Superfícies Base (Imutáveis)
-| Token | Hex | Papel no Layout |
-| :--- | :--- | :--- |
-| `{colors.canvas-light}` | `#dee7e7` | Fundo principal (Light Mode). Gélido e limpo. |
-| `{colors.canvas-night}` | `#0b1120` | Fundo ultra-profundo (Dark Mode). O vácuo onde o AiCore habita. |
-| `{colors.surface-night}` | `#1e293b` | Cards, terminais e painéis de controle (Dark). |
-| `{colors.hairline}` | `#3e3e4d` | Linhas divisórias ultrafinas (1px). |
+- **`{colors.canvas-night}`** (`#0b1120`): O vácuo global. Usado como a camada 0 do shader do WebGL.
+- **`{colors.glass-panel}`** (`rgba(255, 255, 255, 0.05)`): Background de todos os painéis Bento Grid, pareado com `backdrop-filter: blur(24px)`.
+- **`{colors.hairline-glass}`** (`rgba(255, 255, 255, 0.15)`): Bordas para delinear os contêineres de vidro.
 
-### 2.2. Acentos Modulares (Transicionais)
-Estas cores assumem a posição de `{colors.primary}` dependendo do módulo ativo.
+**Acentos Modulares (O Token `{colors.primary}` Dinâmico):**
+Herdando a filosofia de foco único da Supabase (que usa apenas Esmeralda) e da Zapier (Laranja), o AURA_OS usa apenas uma cor de destaque por vez, mas ela varia por contexto. Toda luz no 3D e todo botão ativo respeitam este token:
 
-| Módulo | Cor Principal | Hex | Aplicação Semântica |
-| :--- | :--- | :--- | :--- |
-| **Core / Orquestração** | Crimson | `#a92727` | Dashboards globais, execução de scripts e alertas críticos. |
-| **Estudos** | Cobalto | `#0066ff` | Foco, concentração, organização acadêmica e relatórios. |
-| **Entretenimento** | Magenta | `#b829ff` | Integração com Spotify, mídia e jogos. |
-| **Finanças** | Esmeralda | `#3ecf8e` | Painéis de investimento, tabelas numéricas e fluxos transacionais. |
-| **Agenda** | Ciano | `#25ced1` | Calendários, lembretes e linhas do tempo. |
+- **Default / Global:** Branco Gelo (`#f8fafc`).
+- **Agente Infra (Orquestração):** Crimson (`#a92727`).
+- **Agente Estudos (UFBA):** Cobalto (`#0066ff`).
+- **Agente RPG:** Magenta (`#b829ff`).
+- **Agente Hardware:** Ciano (`#25ced1`).
 
----
+## 2. Tipografia & Layout
 
-## 3. Componente Assinatura: O Núcleo de IA (AiCore 3D)
+O ritmo de leitura adota os espaçamentos da Apple (tracking negativo em displays) e a pureza do Airbnb (`rounded.md` para cards).
 
-O `AiCore` é o elemento visual mais importante do projeto. Ele não é apenas um vídeo de fundo, mas uma entidade WebGL interativa renderizada via React Three Fiber, presente de forma contínua através das rotas da aplicação.
+- **Display/Body:** `Inter`. Títulos em `Weight 600` (tracking `-0.02em`).
+- **Data:** `IBM Plex Mono`.
+- **Raios de Borda (Shapes):**
+  - `{rounded.full}` (Pílulas): Botões do Header ("Aura AI", Microfone).
+  - `{rounded.xl}` (24px): Painéis de informações do Agente (Bento Grid) e a janela do Chat.
+- **Elevação (Shadows):** Nenhuma sombra projetada na interface global. Apenas um nível de sombra suave (`0 8px 32px rgba(0,0,0,0.2)`) é aplicado exclusivamente ao Painel do Elevador (Tela de Chat) quando ele sobrepõe o ambiente 3D.
 
-### 3.1. Estrutura e Camadas Visuais
-O núcleo é composto por três camadas físicas e matemáticas que reagem ao contexto e ao usuário:
+## 3. O Núcleo de IA 3D (AiCore) - Especificação Física
 
-* **Camada 0: Fundo Fluido (Aurora Shader):** Um plano de fundo que preenche toda a tela, renderizado através de *shaders* customizados. Ele mistura o fundo noturno do canvas (`#0b1120`) com as cores ativas do módulo (ex: Cobalto e Magenta) em ondas senoidais lentas e cinematográficas, criando um núcleo brilhante central e uma névoa periférica.
-* **Camada 1: Núcleo Hexagonal Reativo:** 180 cilindros hexagonais distribuídos esfericamente utilizando proporção áurea. Este núcleo é vivo: ele captura a intensidade de frequências graves via microfone (Web Audio API) e pulsa fisicamente, expandindo seu raio e contraindo a escala geométrica a cada batida de áudio. Os blocos emitem luz própria (*emissive*).
-* **Camada 2: Casca Geodésica Externa:** Um icosaedro modificado envolto em material de vidro escuro (*Dark Glass*) com alto índice de refração espacial (IOR 1.5). Os polígonos que formam esta casca flutuam, encolhem organicamente e se deslocam utilizando funções de onda, revelando o núcleo brilhante através de suas frestas.
+Na versão final, a matemática da V0 ganha física e luz estrita:
 
-### 3.2. Integração e Interatividade
-* **Magnetismo Parcial:** O grupo 3D central (Núcleo + Casca) captura a posição X/Y do cursor do mouse em tempo real e rotaciona sutilmente em direção a ele, criando uma sensação de paralaxe profunda.
-* **Iluminação de Estúdio:** Luzes direcionais rebatem no material metálico e reflexivo da casca, enquanto uma `PointLight` dinâmica orbita o conjunto de forma perene.
+1. **Camada 0 (Fundo):** _Aurora Shader_ que interpola entre o preto do canvas e a cor ativa do `{colors.primary}` do agente.
+2. **Camada 1 (Núcleo Fendido):** Material preto absoluto (`roughness 0.15`, `metalness 0.9`). As fendas (Edges) recebem material emissivo vinculado ao `{colors.primary}`, reagindo com efeito _Bloom_ (Post-Processing).
+3. **Camada 2 (Grade Prata):** O Icosaedro Truncado de arestas espessas se torna cromo escovado (`#a0aec0`, altamente metálico) refletindo a luz do núcleo.
+4. **Camada 3 (Painéis Chanfrados):** Os grupos de 3 losangos assumem um cinza espacial profundo, capturando as luzes direcionais que orbitam o palco.
+5. **Reação a Áudio (Web Audio API):** Quando o usuário ativa o microfone (`{button-mic-active}`), os vértices da camada 1 sofrem distorção (`MeshDistortMaterial`), pulsando fisicamente com a amplitude da voz.
 
----
+## 4. O Sistema de Transição de Telas
 
-## 4. Tipografia (Dual-Stack)
+A troca da visão 3D para o "Chat Mode" (aplicativo focado) abandona o conceito de corte de página.
 
-* **Interface (Inter):** Utilizada para títulos e blocos de texto. Tamanhos display recebem *letter-spacing* negativo (ex: `-0.37px`) para densidade editorial.
-* **Dados e Código (IBM Plex Mono):** Obrigatória para números, matrizes de dados, logs de execução Python e relatórios técnicos.
+- O Header é fixo no `z-50`.
+- A visão 3D (Camada 0) sofre transição no `Framer Motion` (Textos desaparecem despedaçando-se para cima).
+- O módulo de Chat materializa-se no `z-40` (`mode="wait"`). Possui uma barra lateral com histórico e um _Input Bar_ inferior.
 
----
+## 5. Detalhamento Modular das Páginas dos Agentes (Bento Grids)
 
-## 5. Geometria e Superfícies (UI 2D)
+O painel esquerdo reage em conteúdo e cor quando um agente orbital é focado no centro-direito da tela.
 
-O minimalismo sobre o `AiCore` exige superfícies limpas para não poluir a tela.
+### 5.1. Módulo: INFRA & AUTOMAÇÃO (Ai_Orchestrator)
 
-* **Raios de Borda Híbridos:** `{rounded.full}` (Pílulas) para botões de ação e barras de pesquisa. `{rounded.sm}` (6px) para terminais, modais de código e tabelas de dados.
-* **Painéis Translúcidos (Glassmorphism):** Para permitir que o fundo 3D respire, a maioria dos painéis de interface principal utiliza fundos noturnos translúcidos (`rgba(30, 41, 59, 0.6)`) combinados com `backdrop-filter: blur(16px)`.
-* **Ausência de Sombras:** Como a profundidade já é dada pela iluminação 3D de fundo, os cards 2D não utilizam *box-shadow*. A divisão entre elementos é feita exclusivamente por bordas em `{colors.hairline}`.
+- **Cor Ativa:** Crimson (`#a92727`).
+- **Header do Card:** Indicador de Status verde "Sincronizado". Título "ORQUESTRAÇÃO GLOBAL".
+- **Bento Block 1 (Console):** Caixa com fundo `canvas-night`. Fonte IBM Plex Mono exibindo um loop de texto de instâncias do Prefect e execução de fluxos Python.
+- **Bento Block 2 (Métricas):** Grid 2x2. "Containers Docker Ativos", "Uso de CPU", "Latência de Rede". Valores em destaque.
 
----
+### 5.2. Módulo: ESTUDOS UFBA (Ai_Engineer)
 
-## 6. Comportamentos de Motion e Transições
+- **Cor Ativa:** Cobalto (`#0066ff`).
+- **Header do Card:** Título "ESTUDOS UFBA // ENGENHARIA ELÉTRICA".
+- **Bento Block 1 (LaTeX Preview):** Fundo translúcido. Equações formatadas (ex: Fator de Potência 0.2, Matriz de MIT).
+- **Bento Block 2 (Atividades):** Lista de tarefas monospaçada: `> [CALC] Linha Transmissão Finch 50Hz (Concluído)`, `> [REL] ANEEL Padrões`.
 
-As transições da aplicação devem refletir fluidez de dados e coerência física.
+### 5.3. Módulo: RPG & CAMPANHAS (Ai_DungeonMaster)
 
-* **Transição de Módulos (Color Morphing):** Ao navegar de "Estudos" para "Finanças", o fundo 3D não sofre recarregamento (*hard reload*). As propriedades *Uniform* do shader de aurora transicionam lentamente via interpolação de cores (ex: de Cobalto para Esmeralda) ao longo de 1200ms.
-* **View Transitions API (Shared Elements):** Elementos da interface 2D (como gráficos expansíveis ou tabelas numéricas) não desaparecem. Eles voam e se reencaixam fluidamente de uma rota para outra usando a física de mola (Spring).
-* **Elevação em Cascata:** Ao abrir um painel de orquestração Python, os nós da interface e as linhas de log não aparecem simultaneamente. Surgem de baixo para cima com um atraso escalar de ~40ms entre cada item (*Staggered Animation*).
+- **Cor Ativa:** Magenta (`#b829ff`).
+- **Header do Card:** Título "LORE & RPG MANAGEMENT".
+- **Bento Block 1 (World-State):** Display de atributos em formato de ficha de RPG limpa. Foco em "Skullport" e "Saint's Bay".
+- **Bento Block 2 (Party Tracker):** Tabela minimalista listando os 8 jogadores. Destaque para o status "Marcelo: Turno Ativo".
+
+### 5.4. Módulo: HARDWARE & SISTEMA (Ai_Hardware)
+
+- **Cor Ativa:** Ciano (`#25ced1`).
+- **Header do Card:** Título "TELEMETRIA DE HARDWARE".
+- **Bento Block 1 (Visualização de Dados):** Micro-gráficos de linha (Sparklines) vetoriais mostrando flutuação térmica do processador e memória.
+- **Bento Block 2 (Dispositivos):** Lista de conexões de ecossistema: Apple Watch (Sync: OK), Poco X8 Pro Max, e Status RMA Corsair em barra de progresso.

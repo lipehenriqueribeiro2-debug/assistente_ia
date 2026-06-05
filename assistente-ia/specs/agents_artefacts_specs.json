@@ -1,0 +1,84 @@
+{
+  "subagents": {
+    "orq": {
+      "id": "orq",
+      "name": "Orquestrador",
+      "type": "Astrolábio",
+      "geometry": {
+        "finalShape": "spherical-rings",
+        "assemblyAxis": "gyro-rotational",
+        "baseScale": 0.75
+      },
+      "behavior": {
+        "gravityEffect": "repulsive-ring",
+        "fieldRadius": 1.5,
+        "alignment": "orbital-plane"
+      },
+      "visuals": {
+        "auraColor": "#a92727",
+        "coreMaterial": "plasma-cyan",
+        "hexCount": 42
+      }
+    },
+    "est": {
+      "id": "rpg",
+      "name": "Estudos UFBA",
+      "type": "Icosaedro",
+      "geometry": {
+        "finalShape": "icosahedron",
+        "assemblyAxis": "face-locking",
+        "baseScale": 0.75
+      },
+      "behavior": {
+        "gravityEffect": "repulsive-ring",
+        "fieldRadius": 1.3,
+        "alignment": "orbital-plane"
+      },
+      "visuals": {
+        "auraColor": "#0066ff",
+        "coreMaterial": "pulsing-core",
+        "hexCount": 60
+      }
+    },
+    "rpg": {
+      "id": "est",
+      "name": "Mestre de Campanhas",
+      "type": "Cubo Desmantelado",
+      "geometry": {
+        "finalShape": "hex-cube",
+        "assemblyAxis": "cluster-snap",
+        "baseScale": 0.75
+      },
+      "behavior": {
+        "gravityEffect": "repulsive-ring",
+        "fieldRadius": 1.4,
+        "alignment": "orbital-plane"
+      },
+      "visuals": {
+        "auraColor": "#b829ff",
+        "coreMaterial": "void-core",
+        "hexCount": 54
+      }
+    },
+    "hw": {
+      "id": "hw",
+      "name": "Hardware e Sistema",
+      "type": "Cilindro",
+      "geometry": {
+        "finalShape": "reactor-cylinder",
+        "assemblyAxis": "vertical-spiral",
+        "baseScale": 0.75
+      },
+      "behavior": {
+        "gravityEffect": "repulsive-ring",
+        "fieldRadius": 1.6,
+        "alignment": "orbital-plane"
+      },
+      "visuals": {
+        "auraColor": "#25ced1",
+        "coreMaterial": "vortex-plasma",
+        "hexCount": 48
+      }
+    }
+  }
+}

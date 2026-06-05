@@ -1,0 +1,73 @@
+{
+  "react_antigravity_system": {
+    "module_name": "AuraAntigravityProvider",
+    "version": "1.0.0",
+    "description": "Especificação arquitetônica para aplicar física de antigravidade (estilo Google Antigravity) a nós do DOM no React, permitindo que painéis flutuem e colidam mantendo sua interatividade HTML.",
+    "core_dependencies": {
+      "physics_engine": "matter-js",
+      "animation_loop": "framer-motion (useAnimationFrame) ou requestAnimationFrame nativo",
+      "dom_sync": "React.useRef + CSS Transform"
+    },
+    "world_configuration": {
+      "engine": {
+        "gravity": {
+          "x": 0,
+          "y": -0.5,
+          "scale": 0.001
+        },
+        "description": "Eixo Y negativo cria o efeito de antigravidade, fazendo os elementos subirem suavemente."
+      },
+      "boundaries": {
+        "ceiling": {
+          "isStatic": true,
+          "restitution": 0.6,
+          "description": "Teto invisível com leve elasticidade para os elementos quicarem ao atingir o topo da tela."
+        },
+        "walls": {
+          "isStatic": true,
+          "friction": 0,
+          "description": "Paredes laterais invisíveis para manter a UI dentro do viewport."
+        }
+      }
+    },
+    "react_integration": {
+      "hook_pattern": "useAntigravityBody",
+      "sync_method": "O motor de física calcula as posições (x, y, angle). O loop de renderização aplica essas posições diretamente à propriedade 'transform' das Refs do DOM (ex: translate3d(x, y, 0) rotate(angle)), evitando re-renderizações (setState) que matariam a performance."
+    },
+    "ui_bodies_properties": {
+      "bento_panels": {
+        "type": "rectangle",
+        "physics": {
+          "mass": 10,
+          "restitution": 0.3,
+          "frictionAir": 0.05,
+          "chamfer": {
+            "radius": 24
+          }
+        },
+        "behavior": "Painéis pesados. Flutuam lentamente e quicam de forma contida. O radius do chamfer físico deve bater com o 'rounded-2xl' (24px) do Tailwind para colisões perfeitas."
+      },
+      "buttons_and_pills": {
+        "type": "circle_or_capsule",
+        "physics": {
+          "mass": 2,
+          "restitution": 0.8,
+          "frictionAir": 0.01
+        },
+        "behavior": "Elementos leves e erráticos. Quicam rapidamente ao colidir com os painéis maiores."
+      }
+    },
+    "user_interaction": {
+      "mouse_constraint": {
+        "enabled": true,
+        "stiffness": 0.2,
+        "damping": 0.1
+      },
+      "pointer_events_preservation": "Para que os botões dentro dos painéis flutuantes continuem clicáveis, o drag da física deve escutar o evento 'onPointerDown' no header do card (drag handle), deixando o resto do HTML livre para cliques padrão do React."
+    },
+    "trigger_state": {
+      "condition": "isAntigravityActive",
+      "transition": "Quando o estado vira 'true', o motor Matter.js escaneia os tamanhos (getBoundingClientRect) de cada Ref registrada, cria os corpos rígidos (bodies) exatamente nas coordenadas atuais, define 'position: absolute' nos elementos do DOM e libera a gravidade inversa."
+    }
+  }
+}
