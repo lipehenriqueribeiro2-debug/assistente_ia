@@ -2,3 +2,14 @@
 # will have compiled files and executables
 /target/
 /gen/schemas
+
+# Configurações e Caches do Assistente / Agente IA (Local)
+.gemini/
+.agent/
+.agents/
+.opencode/
+*skills/
+*skill/
+.agent/skills/
+.agents/skills/
+
